@@ -1,4 +1,4 @@
-import { Effect } from "effect";
+import { Effect, pipe } from "effect";
 import {
   BusResponse,
   datamallGet,
@@ -7,6 +7,10 @@ import {
 } from "./datamall";
 
 const BUS_STOPS_SKIP_TIMES = 10;
+let cacheBusStops = {
+  time: 0,
+  busStops: [] as BusStop[],
+};
 
 export interface BusStop {
   BusStopCode: string;
@@ -28,9 +32,20 @@ const getBusStopsSkipBy = (
         ...getBusStopsSkipBy(--times),
       ];
 
-export const getBusStops = (latitude: number, longitude: number) =>
-  Effect.all(getBusStopsSkipBy()).pipe(
+export const getBusStops = (latitude: number, longitude: number) => {
+  if (Date.now() - cacheBusStops.time < 1000 * 60 * 60 * 24) {
+    return pipe(
+      cacheBusStops.busStops,
+      (busStops) =>
+        sortNearestBusStops({ lat: latitude, lon: longitude }, busStops),
+      (sortedBusStops) => sortedBusStops.slice(0, 100),
+      (sliceBusStops) => new Promise<BusStop[]>((res) => res(sliceBusStops))
+    );
+  }
+
+  return Effect.all(getBusStopsSkipBy()).pipe(
     Effect.andThen((busStopsArray) => busStopsArray.flat()),
+    Effect.tap((busStops) => (cacheBusStops = { time: Date.now(), busStops })),
     Effect.andThen((busStops) =>
       sortNearestBusStops({ lat: latitude, lon: longitude }, busStops)
     ),
@@ -38,6 +53,7 @@ export const getBusStops = (latitude: number, longitude: number) =>
     Effect.provide(datamallServiceLayer),
     Effect.runPromise
   );
+};
 
 type Coordinate = { lat: number; lon: number };
 
