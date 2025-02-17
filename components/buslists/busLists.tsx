@@ -13,7 +13,7 @@ export default function BusLists() {
   useEffect(() => {
     setIsLoading(true);
     window.navigator.geolocation.getCurrentPosition(({ coords }) => {
-      getBusStopsAction(1.36098, 103.9356).then((res) => {
+      getBusStopsAction(coords.latitude, coords.longitude).then((res) => {
         setBusStops(res);
         setIsLoading(false);
       });
