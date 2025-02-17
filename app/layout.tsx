@@ -31,14 +31,10 @@ export default function RootLayout({
       >
         {children}
         <dialog
-          className="absolute top-[calc(50%-50px)] left-[calc(50%-50px)] bg-background/0 overflow-hidden outline-0 backdrop:bg-black backdrop:opacity-70"
+          className="absolute top-[calc(50%---spacing(13))] left-[calc(50%---spacing(13))] bg-background/0 overflow-hidden outline-0 backdrop:bg-black backdrop:opacity-70"
           id="spinner"
         >
-          <LoaderCircle
-            height={100}
-            width={100}
-            className="stroke-primary animate-spin"
-          />
+          <LoaderCircle className="stroke-primary animate-spin h-26 w-26" />
         </dialog>
       </body>
     </html>
