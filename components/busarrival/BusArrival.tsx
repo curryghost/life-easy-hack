@@ -26,11 +26,13 @@ export default function BusArrival({ busStop }: Prop) {
     <>
       {!isLoading
         ? buses.map((bus) => (
-            <div key={bus.ServiceNo} className="grid grid-cols-4">
-              <p>{bus.ServiceNo}</p>
-              {bus.NextBus && <Bus bus={bus.NextBus} />}
-              {bus.NextBus2 && <Bus bus={bus.NextBus2} />}
-              {bus.NextBus3 && <Bus bus={bus.NextBus3} />}
+            <div key={bus.ServiceNo} className="flex items-center">
+              <p className="font-bold w-17">{bus.ServiceNo}</p>
+              <div className="grid grid-cols-3 gap-3">
+                {bus.NextBus && <Bus bus={bus.NextBus} />}
+                {bus.NextBus2 && <Bus bus={bus.NextBus2} />}
+                {bus.NextBus3 && <Bus bus={bus.NextBus3} />}
+              </div>
             </div>
           ))
         : Array(5)

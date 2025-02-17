@@ -11,7 +11,7 @@ const convertToMins = (date: string) => {
   const futureTime = new Date(date).getTime();
 
   const timeInMins = Math.round((futureTime - currentTime) / 1000 / 60);
-  return timeInMins < 1 ? "Arr" : `${timeInMins.toString()} mins`;
+  return timeInMins < 1 ? "Arriving" : `${timeInMins.toString()}`;
 };
 
 const getLoadColor = (type: string) =>
@@ -25,8 +25,13 @@ export default function Bus({ bus }: Props) {
   return (
     <>
       {bus.EstimatedArrival && (
-        <span className="flex w-25 justify-between">
-          <p>{convertToMins(bus.EstimatedArrival)}</p>
+        <span className="flex w-25 justify-between items-center">
+          <div className="flex justify-between items-baseline w-full px-3">
+            <p className="text-slate-300 text-xs m-0">
+              {convertToMins(bus.EstimatedArrival)}
+            </p>
+            {!isNaN(+convertToMins(bus.EstimatedArrival)) && <span>mins</span>}
+          </div>
           {bus.Type === "DD" ? (
             <DoubleDeckerBus
               height={30}
