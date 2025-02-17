@@ -26,7 +26,7 @@ export default function BusLists() {
   }, [isLoading]);
 
   return (
-    <Accordion className="w-lg" type="single" collapsible>
+    <Accordion className="max-w-lg px-3" type="single" collapsible>
       {busStops.map((busStop) => (
         <BusList key={busStop.BusStopCode} busStop={busStop} />
       ))}
